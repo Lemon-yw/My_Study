@@ -46,7 +46,7 @@
 
 > 在Python中，哈希表对应的集合叫作**字典(dict)**。
 
-<img src="/Users/didi/Library/Application Support/typora-user-images/image-20200720174321392.png" alt="image-20200720174321392" style="zoom:67%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ggxm440ob6j30p60cgjxp.jpg" alt="image-20200720174321392" style="zoom:67%;" />
 
 哈希函数如何转化成数组的下标？
 

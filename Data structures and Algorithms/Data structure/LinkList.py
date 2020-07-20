@@ -9,7 +9,7 @@ class Node:
         self.next = None
 
 
-class LinkList:
+class MyLinkList:
     def __init__(self):
         # 节点数量
         self.size = 0
@@ -86,7 +86,8 @@ class LinkList:
 
 
 if __name__ == '__main__':
-    linkedList = LinkList()
+    linkedList = MyLinkList()
+
     linkedList.insert(0, 3)  # 3
     linkedList.insert(0, 4)  # 4 3
     linkedList.insert(2, 9)  # 4 3 9

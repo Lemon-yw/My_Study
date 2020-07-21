@@ -1,7 +1,12 @@
 """
 最大优先队列(最大堆实现)
-    入队：二叉堆的节点上浮
-    出队：二叉堆的节点下沉
+    入队：
+        队尾入
+        二叉堆的节点上浮
+    出队：
+        队首出
+        尾节点(队尾)填充到队首，尾节点弹出
+        二叉堆的节点下沉
 """
 
 
@@ -74,5 +79,6 @@ if __name__ == '__main__':
     queue.enqueue(10)
     queue.enqueue(2)
     queue.enqueue(7)
+
     print(queue.dequeue())
     print(queue.dequeue())

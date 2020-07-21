@@ -39,11 +39,14 @@ def down_adjust(parent_index, array):
     child_index = parent_index * 2 + 1
     # temp保存待下沉节点的值，用于最后的赋值
     temp = array[parent_index]
-    # 如果待下沉节点有左孩子节点，并且待下沉节点值大于其左孩子节点的值，则进行循环的下沉操作
-    while child_index < length and temp > array[child_index]:
+    # 如果待下沉节点有左孩子节点，则进行循环的下沉操作
+    while child_index < length:
         # 如果有右孩子，且右孩子小于左孩子值，则定位到右孩子
         if child_index + 1 < length and array[child_index + 1] < array[child_index]:
             child_index += 1
+        # 如果父节点大于任何一个孩子的值，直接跳出
+        if temp >= array[child_index]:
+            break
         # 无需真正的交换，单向赋值即可
         array[parent_index] = array[child_index]
         parent_index = child_index

@@ -94,7 +94,7 @@ def merge_sort(a, b):
 
 
 if __name__ == '__main__':
-    # print("字符串中的子串:", count_str('abc'))
+    print("字符串中的子串:", count_str('abc'))
 
     a = [1, 3, 4, 6, 7, 78, 97, 190]
     b = [2, 5, 6, 8, 10, 12, 14, 16, 18]

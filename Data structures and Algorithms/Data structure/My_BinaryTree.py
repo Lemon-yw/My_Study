@@ -24,7 +24,7 @@ def create_binary_tree(input_list):
     input_list: 3, 2, 9, None, None, 10, None, None, 8, None, 4
     
                3
-    ​       2        8
+          2        8
         9	 10	  N    4
       N   N N   N
     """
@@ -63,7 +63,7 @@ def pre_order_traversal_with_stack(node):
     node: 3, 2, 9, None, None, 10, None, None, 8, None, 4
     
                3
-    ​       2        8
+           2        8
         9	 10	  N    4
       N   N N   N
     """

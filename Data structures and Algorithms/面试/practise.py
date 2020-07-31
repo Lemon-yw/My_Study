@@ -72,6 +72,7 @@ def partition(array, start_index, end_index):
 # quick_sort(array, 0, len(array)-1)
 # print(array)
 
+
 class TreeNode:
     def __init__(self, data):
         self.data = data
@@ -87,6 +88,18 @@ def pre_order_traveral(node):
     print(node.data, end=' ')
     pre_order_traveral(node.left)
     pre_order_traveral(node.right)
+
+
+def pre_order_traveral_stack(node):
+    stack = []
+    while node and len(stack) > 0:
+        while node:
+            print(node.data, end=' ')
+            stack.append(node)
+            node = node.left
+        if len(stack) > 0:
+            node = stack.pop()
+            node = node.right
 
 
 # 2.2

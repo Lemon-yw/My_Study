@@ -76,6 +76,7 @@ def pre_order_traversal_with_stack(node):
             stack.append(node)
             # temp.append(node.data)
             node = node.left
+        # 当前节点没有左孩子了，开始向上回溯
         if len(stack) > 0:
             node = stack.pop()
             # temp.pop()

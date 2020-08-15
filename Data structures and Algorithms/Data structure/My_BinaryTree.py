@@ -120,7 +120,7 @@ def level_order_traversal(node):
 
     while q:
         cur = q.popleft()
-        print(node.data, end=' ')
+        print(cur.data, end=' ')
         if cur.left:
             q.append(cur.left)
         if cur.right:
@@ -130,7 +130,7 @@ def level_order_traversal(node):
 if __name__ == '__main__':
     my_input_list = list([3, 2, 9, None, None, 10, None, None, 8, None, 4])
     root = create_binary_tree(my_input_list)
-    print("root:", root.data)  # 3
+    print("root:", root.data)   # 3
     print("前序遍历：")
     # pre_order_traversal(root)
     pre_order_traversal_with_stack(root)

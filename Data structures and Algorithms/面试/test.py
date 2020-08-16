@@ -1,49 +1,67 @@
-def searchRange(nums, target):
-    if not nums:  # 如果数组为空
-        return [-1, -1]
+import collections
 
-    low, high = 0, len(nums) - 1  # 定义数组初始边界
-    left = -1  # 定义target值区间
-    right = len(nums) - 1
-    # 先找左边
-    while low <= high:
-        mid = (low + high) // 2
-        # 如果此时的索引对应的值为target，如果是那么有种情况说明这是左边界：
-        # 1.mid==0时，即数组的最左边。2.当前值左面的值不是目标值
-        if nums[mid] == target and (mid == 0 or nums[mid - 1] != target):
-            left = mid
-            break
-        # 正常二分操作
-        if nums[mid] < target:
-            low = mid + 1
+
+class Solution:
+    def openLock(self, deadends, target):
+        # 记录需要跳过的死亡密码
+        deads = set()
+        for s in deadends:
+            deads.add(s)
+        # 记录已经穷举过的密码，防止走回头路
+        visited = set()
+        q = collections.deque()
+        # 从起点开始启动广度优先搜索
+        step = 0
+        q.append("0000")
+        visited.add("0000")
+
+        while q:
+            sz = len(q)
+            # 将当前队列中的所有节点向周围扩散
+            for _ in range(sz):
+                cur = q.popleft()
+                # 判断是否到达终点
+                if cur in deads:
+                    continue
+                if cur == target:
+                    return step
+                # 将一个节点的未遍历相邻节点加入队列
+                for i in range(4):
+                    up = self.plusOne(cur, i)
+                    if up not in visited:
+                        q.append(up)
+                        visited.add(up)
+                    down = self.minusOne(cur, i)
+                    if down not in visited:
+                        q.append(down)
+                        visited.add(down)
+            step += 1
+        return -1
+
+    # 将 s[j] 向上拨动一次
+    def plusOne(self, s, j):
+        s = list(s)
+        if s[j] == '9':
+            s[j] = '0'
         else:
-            # 注意一下这个 else 的操作包括了两种含义：
-            # 1.nums[mid] > target。2. nums[mid] == target and nums[mid-1] != target 时需要左移
-            high = mid - 1
-    # 不存在目标值
-    if left == -1:
-        return [-1, -1]
+            s[j] = int(s[j])
+            s[j] += 1
+            s[j] = str(s[j])
+        return ''.join(s)
 
-    # 再找右边
-    high = len(nums) - 1  # 重新定义区间
-    low = left  # 此时的左区间就从target的最左区间开始就可以了，没必要从0开始
-    while low <= high:
-        mid = (low + high) // 2
-        # 如果此时的索引对应的值为target，如果是那么有种情况说明这是右边界：
-        # 1.mid==len(nums)-1时，即数组的最右边。2.当前值右面的值不是目标值
-        if nums[mid] == target and (mid == len(nums) - 1 or nums[mid + 1] != target):
-            right = mid
-            break
-        if nums[mid] > target:
-            high = mid - 1
+    # 将 s[i] 向下拨动一次
+    def minusOne(self, s, j):
+        s = list(s)
+        if s[j] == '0':
+            s[j] = '9'
         else:
-            # 注意一下这个 else 的操作包括了两种含义：
-            # 1.nums[mid] < target。2. nums[mid] == target and nums[mid+1] != target 时需要右移
-            low = mid + 1
+            s[j] = int(s[j])
+            s[j] -= 1
+            s[j] = str(s[j])
+        return ''.join(s)
 
-    return [left, right]
 
-
-nums = [5, 7, 7, 8, 8, 10]
-target = 8
-print(searchRange(nums, target))
+deadends = ["8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"]
+target = "8888"
+solution = Solution()
+print(solution.openLock(deadends, target))

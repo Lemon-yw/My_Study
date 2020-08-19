@@ -1022,7 +1022,7 @@ class Solution:
 
    对于两个字符串的动态规划问题，套路是通用的。比如说对于字符串 `s1` 和 `s2`，一般来说都要构造一个这样的 DP table：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghv2zseq9bj314m0oi413.jpg" alt="image-20200818171420579" style="zoom:33%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghv2zseq9bj314m0oi413.jpg" alt="image-20200818171420579" style="zoom:28%;" />
 
 ​	为了方便理解此表，我们暂时认为索引是从 1 开始的，待会的代码中只要稍作调整即可。
 
@@ -1041,7 +1041,7 @@ class Solution:
 
    **状态转移说简单些就是做选择。**比如说这个问题，是求 `s1` 和 `s2` 的最长公共子序列，不妨称这个子序列为 `lcs`。那么对于 `s1` 和 `s2` 中的每个字符，有什么选择？很简单，**两种选择，要么在 `lcs` 中，要么不在**。
 
-   <img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghv4jz9t5vj313y0mwgn4.jpg" alt="image-20200818180822608" style="zoom:33%;" />
+   <img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghv4jz9t5vj313y0mwgn4.jpg" alt="image-20200818180822608" style="zoom: 25%;" />
 
    这个「在」和「不在」就是选择，关键是，应该如何选择呢？这个需要动点脑筋：如果某个字符应该在 `lcs` 中，那么这个字符肯定同时存在于 `s1` 和 `s2` 中，因为 `lcs` 是最长**公共**子序列嘛。所以本题的思路是这样：
 
@@ -1071,7 +1071,7 @@ class Solution:
 
 对于 `s1[i]` 和 `s2[j]` 不相等的情况，**至少有一个**字符不在 `lcs` 中，会不会两个字符都不在呢？比如下面这种情况：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghv4zeqcx8j31400i475f.jpg" alt="image-20200818182311919" style="zoom:33%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghv4zeqcx8j31400i475f.jpg" alt="image-20200818182311919" style="zoom: 30%;" />
 
 所以代码是不是应该考虑这种情况，改成这样：
 
@@ -1202,7 +1202,7 @@ else:
 
    另外，看看刚才写的状态转移方程，想求`dp[i][j]`需要知道`dp[i+1][j-1]`，`dp[i+1][j]`，`dp[i][j-1]`这三个位置；再看看我们确定的 base case，填入 dp 数组之后是这样：
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghv7uh6pvij30wo0iytj9.jpg" alt="image-20200818200215825" style="zoom:33%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghv7uh6pvij30wo0iytj9.jpg" alt="image-20200818200215825" style="zoom:30%;" />
 
 ​	**为了保证每次计算`dp[i][j]`，左、下、左下三个方向的位置已经被计算出来，只能斜着遍历或者反着遍历**：
 
@@ -1276,8 +1276,8 @@ for i in range(n):
 ```
 
 我们可以用自然语言描述出每一个状态的含义：
-*  `dp[3][2][1]` 的含义就是：今天是第三天，我现在手上持有着股票，至今最多进行 2 次交易。
 *  `dp[2][3][0]` 的含义：今天是第二天，我现在手上没有持有股票，至今最多进行 3 次交易。
+*  `dp[3][2][1]` 的含义就是：今天是第三天，我现在手上持有着股票，至今最多进行 2 次交易。
 
 我们想求的最终答案是 `dp[n-1][K][0]`，即最后一天，最多允许 K 次交易，最多获得多少利润。
 
@@ -1293,7 +1293,7 @@ for i in range(n):
 
 <img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghw56wd42yj31360qmafv.jpg" alt="image-20200819151555420" style="zoom: 25%;" />
 
-通过这个图可以很清楚地看到，每种状态（0 和 1）是如何转移而来的。根据这个图，我们来写一下**状态转移方程**：
+通过这个图可以很清楚地看到，每种状态（0 和 1）是如何转移而来的。根据这个图，写出**状态转移方程**：
 
 ```python
 """

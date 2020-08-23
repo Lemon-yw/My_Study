@@ -434,6 +434,670 @@ def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
            BST(root.left, target)
    ```
 
+# 回溯算法专题
+
+**解决一个回溯问题，实际上就是一个决策树的遍历过程**。你只需要思考 3 个问题：
+
+1. 路径：也就是已经做出的选择。
+
+2. 选择列表：也就是你当前可以做的选择。
+
+3. 结束条件：也就是到达决策树底层，无法再做选择的条件。
+
+代码方面，回溯算法的框架：
+
+```python
+def trackback(选择列表, 路径):
+    if 满足结束条件:
+        res.append(路径)
+        return
+
+    for 选择 in 选择列表:
+        路径.append(选择) # 做选择
+        trackback(路径, 选择列表)	# 进入下一层决策树
+        路径.pop() # 撤销选择
+res = []
+trackBack(nums, [])
+return res
+```
+
+**其核心就是 for 循环里面的递归，在递归调用之前「做选择」，在递归调用之后「撤销选择」**。
+
+## [46. 全排列](https://leetcode-cn.com/problems/permutations/)
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghxc0fmdqsj31360l21kx.jpg" alt="image-20200820155728193" style="zoom: 33%;" />
+
+只要从根遍历这棵树，记录路径上的数字，其实就是所有的全排列。**我们不妨把这棵树称为回溯算法的「决策树」**。
+
+**为啥说这是决策树呢，因为你在每个节点上其实都在做决策**。比如说你站在上图的红色节点上：
+
+你现在就在做决策，可以选择 1 那条树枝，也可以选择 3 那条树枝。为啥只能在 1 和 3 之中选择呢？
+因为 2 这个树枝在你身后，这个选择你之前做过了，而全排列是不允许重复使用数字的。
+
+**现在可以解答开头的几个名词：`[2]`就是「路径」，记录你已经做过的选择；`[1,3]`就是「选择列表」，表示你当前可以做出的选择；「结束条件」就是遍历到树的底层，在这里就是选择列表为空的时候**。
+
+如果明白了这几个名词，**可以把「路径」和「选择」列表作为决策树上每个节点的属性**，比如下图列出了几个节点的属性：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghxc4akmz8j313k0ne7wh.jpg" alt="image-20200820160113667" style="zoom:33%;" />
+
+**我们定义的** **`backtrack`** **函数其实就像一个指针，在这棵树上游走，同时要正确维护每个节点的属性，每当走到树的底层，其「路径」就是一个全排列**。
+
+再进一步，如何遍历一棵树？各种搜索问题其实都是树的遍历问题，而多叉树的遍历框架就是这样：
+
+```python
+def traverse(root):
+    for (TreeNode child : root.childern)
+        # 前序遍历需要的操作
+        traverse(child)
+        # 后序遍历需要的操作
+```
+
+而所谓的前序遍历和后序遍历，他们只是两个很有用的时间点，如图：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghxeeyhsx8j30ui0iqx0e.jpg" alt="image-20200820172039951" style="zoom:40%;" />
+
+**前序遍历的代码在进入某一个节点之前的那个时间点执行，后序遍历代码在离开某个节点之后的那个时间点执行**。
+
+「路径」和「选择」是每个节点的属性，函数在树上游走要正确维护节点的属性，那么就要在这两个特殊时间点搞点动作：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ghxegdc39mj312o0l64qp.jpg" alt="image-20200820172201371" style="zoom:33%;" />
+
+现在再来看回溯算法的这段核心框架：
+
+```python
+def trackback(选择列表, 路径):
+    if 满足结束条件:
+        res.append(路径)
+        return
+
+    for 选择 in 选择列表:
+        路径.append(选择) # 做选择
+        trackback(路径, 选择列表)	# 进入下一层决策树
+        路径.pop() # 撤销选择
+res = []
+trackBack(nums, [])
+return res
+```
+
+**我们只要在递归之前做出选择，在递归之后撤销刚才的选择**，就能正确得到每个节点的选择列表和路径。
+
+下面，直接看全排列代码：
+
+```python
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        # 路径：选择的元素记录在 track 中
+        # 选择列表：nums 中不存在于 track 的那些元素
+        # 结束条件：nums 中的元素全都在 track 中出现
+        def trackBack(nums, track):
+            # 触发结束条件
+            if len(track) == len(nums):
+                res.append(track[:])   # 需要传递下track的拷贝，否则对track的修改会影响到结果
+                return
+            for i in nums:
+                # 排除不合法的选择
+                if i in track:
+                    continue
+                track.append(i)   # 做选择
+                trackBack(nums, track)   # 进入下一层决策树
+                track.pop()   # 取消选择
+        res = []
+        trackBack(nums, [])
+        return res
+```
+
+## [77. 组合](https://leetcode-cn.com/problems/combinations/)
+
+这就是典型的回溯算法，`k` 限制了树的高度，`n` 限制了树的宽度，直接套回溯算法模板框架就行了：
+
+```python
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        def trackback(start, track):
+            # 到达树的底部
+            if k == len(track):
+                res.append(track[:])
+                return
+            # 注意 i 从 start 开始递增
+            for i in range(start, n+1):
+                # if i in track:	# 注意这里不需要再判断，因为 i 每次都是从 i+1 开始，
+                #    continue		# 所以track每次append的 i 值都不一样
+                track.append(i)	# 做选择
+                trackback(i+1, track)
+                track.pop()	 # 撤销选择   
+        res = []
+        trackback(1, [])
+        return res
+```
+
+## [78. 子集](https://leetcode-cn.com/problems/subsets/)
+
+```python
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        def trackback(start, track):
+            res.append(track[:])
+            for i in range(start, len(nums)):
+                track.append(nums[i])
+                trackback(i+1, track)
+                track.pop()
+        res = []
+        trackback(0, [])
+        return res
+```
+
+与排列问题不同，组合问题和子集问题都不能有重复元素，故回溯时都从当前位置的下一个位置开始。
+
+
+
+# 双指针 & 滑动窗口专题
+
+## 快慢指针
+
+主要解决链表中的问题，比如典型的判定链表中是否包含环。
+
+**快慢指针一般都初始化指向链表的头结点 head，前进时快指针 fast 在前，慢指针 slow 在后，巧妙解决一些链表中的问题。**
+
+### [876. 链表的中间结点](https://leetcode-cn.com/problems/middle-of-the-linked-list/)
+
+让快指针一次前进两步，慢指针一次前进一步，当快指针到达链表尽头时，慢指针就处于链表的中间位置。
+
+```python
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+```
+
+### [141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
+
+分析：单链表的特点是每个节点只知道下一个节点，所以一个指针的话无法判断链表中是否含有环的。
+
+如果链表中不含环：这个指针最终会遇到空指针`None`表示链表到头了，可以判断该链表不含环。
+如果链表中含有环：这个指针就会陷入死循环，因为环形数组中没有`None`指针作为尾部节点。
+
+**经典解法就是用两个指针，一个每次前进两步，一个每次前进一步。**
+如果不含有环，跑得快的那个指针最终会遇到 `None`，说明链表不含环；
+如果含有环，快指针最终会超慢指针一圈，和慢指针相遇，说明链表含有环。
+
+```python
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+```
+
+### [142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+
+分析：第一次相遇时，假设慢指针 slow 走了 k 步，那么快指针 fast 一定走了 2k 步，也就是说比 slow 多走了 k 步（也就是环的长度）。
+
+<img src="https://mmbiz.qpic.cn/mmbiz_png/map09icNxZ4lFDturGXicxrn2F0wKQPgocMTLbYubOMnV8BG7fkHKw7cIKV43yOlzzuNOwvFW7eVsPbgC30FG2rQ/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom: 50%;" />
+
+设相遇点距环的起点的距离为 m，那么环的起点距头结点 head 的距离为 k - m，也就是说如果从 head 前进 k - m 步就能到达环起点。
+巧的是，如果从相遇点继续前进 k - m 步，也恰好到达环起点。
+
+<img src="https://mmbiz.qpic.cn/mmbiz_png/map09icNxZ4lFDturGXicxrn2F0wKQPgocgdhvrjrUt8ibD3PXJomkhSBk5CPubhUQCxiaw2bwJwKP7Y3ODBZc5xag/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom:50%;" />
+
+所以，只要相遇后我们把快慢指针中的任一个重新指向 head，然后两个指针同速前进，k - m 步后就会相遇，相遇之处就是环的起点了。
+
+```python
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        slow, fast = head, head
+        while True:
+            if not (fast and fast.next): 
+                return
+            slow = slow.next
+            fast = fast.next.next
+            if fast == slow: 
+                break
+        slow = head
+        while slow != fast:
+            slow = slow.next
+            fast = fast.next
+        return slow
+```
+
+### [剑指 Offer 22. 链表中倒数第k个节点](https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+思路还是使用快慢指针：让快指针先走 k 步，然后快慢指针开始同速前进。
+这样当快指针走到链表末尾 null 时，慢指针所在的位置就是倒数第 k 个链表节点：
+
+```python
+class Solution:
+    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        slow, fast = head, head
+        while k != 0:
+            fast = fast.next
+            k -= 1
+        while fast:
+            slow = slow.next
+            fast = fast.next
+        return slow
+```
+
+## 左右指针
+
+主要解决数组（或者字符串）中的问题，比如二分查找。
+
+**左右指针在数组中实际是指两个索引值，一般初始化为 `left = 0`, `right = nums.length - 1`**
+
+### 二分查找
+
+#### 二分查找框架
+
+对于寻找左右边界的二分搜索，常见的手法是使用左闭右开的「搜索区间」，**根据逻辑将「搜索区间」全都统一成两端都闭，便于记忆，只要修改两处即可变化出三种写法：**
+
+```python
+# 寻找一个数（基本的二分搜索）
+def binary_search(nums, target):
+    left, right = 0, len(nums) - 1 
+    while left <= right:
+        mid = (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        elif nums[mid] > target:
+            right = mid - 1
+        elif nums[mid] == target:
+            # 直接返回
+            return mid
+    # 直接返回
+    return -1
+
+# 寻找左侧边界的二分搜索
+def left_bound(nums, target):
+    left, right = 0, len(nums) - 1
+    while left <= right:
+        mid = (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        elif nums[mid] > target:
+            right = mid - 1
+        elif nums[mid] == target:
+            # 别返回，锁定左侧边界
+            right = mid - 1
+    # 最后要检查 left 越界的情况
+    if left >= len(nums) or nums[left] != target:
+        return -1
+    return left
+
+# 寻找右侧边界的二分搜索
+def right_bound(nums, target):        
+    left, right = 0, len(nums) - 1
+    while left <= right:
+        mid = (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        elif nums[mid] > target:
+            right = mid - 1
+        elif nums[mid] == target:
+            # 别返回，锁定右侧边界
+            left = mid + 1
+    # 最后要检查 right 越界的情况
+    if right < 0 or nums[right] != target:
+        return -1
+    return right
+```
+
+#### [704. 二分查找](https://leetcode-cn.com/problems/binary-search/)
+
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums)-1
+
+        while left <= right:
+            mid = (left+right) // 2
+            if target < nums[mid] :
+                right = mid - 1
+            elif target > nums[mid]:
+                left = mid + 1
+            else:
+                return mid
+        return -1
+```
+
+#### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+```python
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        if not nums or len(nums) == 0:
+            return [-1, -1]
+        left, right = -1, -1
+
+        # left bounder
+        start, end = 0, len(nums) - 1
+        while start <= end:
+            mid = start + ((end - start) // 2)
+            if target < nums[mid]:
+                end = mid - 1
+            elif target > nums[mid]:
+                start = mid + 1
+            else:
+                end = mid - 1
+        left = end + 1
+        if left >= len(nums) or nums[left] != target:
+            return [-1, -1]
+
+        # right bounder
+        start, end = 0, len(nums) - 1
+        while start <= end:
+            mid = start + ((end - start) // 2)
+            if target > nums[mid]:
+                start = mid + 1
+            elif target < nums[mid]:
+                end = mid - 1
+            else:
+                start = mid + 1
+        right = start - 1
+        if right < 0 or nums[right] != target:
+            return [-1, -1]
+
+        return [left, right]
+```
+
+
+
+### [167. 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
+
+**只要数组有序，就应该想到双指针技巧。这道题的解法有点类似二分查找，通过调节 left 和 right 可以调整 sum 的大小**
+
+```python
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        left, right = 0, len(numbers)-1
+        while left < right:
+            sum_val = numbers[left] + numbers[right]
+            if sum_val == target:
+                return [left+1, right+1]
+            elif sum_val < target:
+                left += 1
+            else:
+                right -= 1
+```
+
+### 滑动窗口算法
+
+这个算法技巧的思路就是维护一个窗口，不断滑动，然后更新答案。该算法的大致逻辑如下：
+
+```python
+window = {}
+left = right = 0, 0
+
+while right < len(s):
+    # 增大窗口
+	window[s[right]] = window.get(s[right], 0) + 1
+	right += 1
+    while (window needs shrink):
+        # 缩小窗口
+        window[s[left]] -= 1
+        left += 1
+```
+
+**滑动窗口算法框架**
+
+```python
+def slidingWindow(s, t):
+    need, window = {}, {}
+    for c in t:
+    	need[c] = need.get(c, 0) + 1
+
+    left, right = 0, 0
+    valid = 0
+    while right < len(s):
+        # c 是将移入窗口的字符
+        c = s[right]
+        # 右移窗口
+        right += 1
+        # 进行窗口内数据的一系列更新
+        ...
+
+        # 判断左侧窗口是否要收缩
+        while (window needs shrink):
+            # d 是将移出窗口的字符
+            d = s[left]
+            # 左移窗口
+            left += 1
+            # 进行窗口内数据的一系列更新
+            ...
+```
+
+**其中两处`...`表示的更新窗口数据的地方，到时候你直接往里面填就行了**。
+
+而且，这两个`...`处的操作分别是右移和左移窗口更新操作，它们操作是完全对称的。
+
+#### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)
+
+**滑动窗口算法思路：**
+
+1. 我们在字符串`S`中使用双指针中的左右指针技巧，初始化`left = right = 0`，**把索引左闭右开区间`[left, right)`称为一个「窗口」**。
+
+2. 我们先不断地增加`right`指针扩大窗口`[left, right)`，直到窗口中的字符串符合要求（包含了`T`中的所有字符）。
+
+3. 此时，我们停止增加`right`，转而不断增加`left`指针缩小窗口`[left, right)`，直到窗口中的字符串不再符合要求（不包含`T`中的所有字符了）。同时，每次增加`left`，我们都要更新一轮结果。
+
+4. 重复第 2 和第 3 步，直到`right`到达字符串`S`的尽头。
+
+> **第 2 步相当于在寻找一个「可行解」，然后第 3 步在优化这个「可行解」，最终找到最优解，**也就是最短的覆盖子串。左右指针轮流前进，窗口大小增增减减，窗口不断向右滑动，这就是「滑动窗口」这个名字的来历。
+
+下面画图理解一下，`needs`和`window`相当于计数器，分别记录`T`中字符出现次数和「窗口」中的相应字符的出现次数。
+
+*初始状态：*
+
+<img src="https://mmbiz.qpic.cn/sz_mmbiz_png/gibkIz0MVqdGQlBxOlAet1AXGPoibCzEow6FwvAvsZKyCTCtrmLcvKDxhYAJEqI36cAZxfoIWLFibEhmz9IfHf24Q/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom: 50%;" />
+
+*增加`right`，直到窗口`[left, right)`包含了`T`中所有字符：*
+
+<img src="https://mmbiz.qpic.cn/sz_mmbiz_png/gibkIz0MVqdGQlBxOlAet1AXGPoibCzEowCyAS47jbjAGEfqUVRzkKDWbT6Y8JiarUicPMVR2yI72X3X6hjBGj4bGw/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom:50%;" />
+
+*现在开始增加`left`，缩小窗口`[left, right)`：*
+
+<img src="https://mmbiz.qpic.cn/sz_mmbiz_png/gibkIz0MVqdGQlBxOlAet1AXGPoibCzEowoE6BjdgVFKZwEb1q6VibCzIsNuoYmHuNicVdlDibQrQD6lRJbibjkBxO4A/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom:50%;" />
+
+*直到窗口中的字符串不再符合要求，`left`不再继续移动：*
+
+<img src="https://mmbiz.qpic.cn/sz_mmbiz_png/gibkIz0MVqdGQlBxOlAet1AXGPoibCzEowZQrqU81dPoEicq1J93aicY0A70IdicorFC5kfhJKa66CibKQTJxY4A60jA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" style="zoom:50%;" />
+
+之后重复上述过程，先移动`right`，再移动`left`…… 直到`right`指针到达字符串`S`的末端，算法结束。
+
+**现在我们来看看这个滑动窗口代码框架怎么用：**
+
+首先，初始化`window`和`need`两个哈希表（字典），记录窗口中的字符和需要凑齐的字符：
+
+```python
+need, window = {}, {}
+for c in t:
+    need[c] = need.get(c, 0) + 1
+# 或者直接用：need = Counter(t)
+```
+
+然后，使用`left`和`right`变量初始化窗口的两端，注意区间`[left, right)`是左闭右开的，所以初始情况下窗口没有包含任何元素：
+
+```python
+left, right = 0, 0
+valid = 0
+while right < len(s):
+    # 开始滑动
+```
+
+**其中`valid`变量表示窗口中满足`need`条件的字符个数**，如果`valid`和`len(need)`的大小相同，则说明窗口已满足条件，已经完全覆盖了串`T`。
+
+**现在开始套模板，只需要思考以下四个问题**：
+
+1. 当移动`right`扩大窗口，即加入字符时，应该更新哪些数据？
+2. 当移动`left`缩小窗口，即移出字符时，应该更新哪些数据？
+3. 什么条件下，窗口应该暂停扩大，开始移动`left`缩小窗口？
+4. 我们要的结果应该在扩大窗口时还是缩小窗口时进行更新？
+
+**回答：**
+
+1. 如果一个字符进入窗口，应该增加`window`计数器；
+2. 如果一个字符将移出窗口的时候，应该减少`window`计数器；
+3. 当`valid`满足`need`时应该收缩窗口；
+4. 应该在收缩窗口的时候更新最终结果。
+
+完整代码：
+
+```python
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        need, window = {}, {}
+        for c in t:
+            need[c] = need.get(c, 0) + 1
+
+        left, right = 0, 0
+        valid = 0	# 表示窗口中满足 need 条件的字符个数
+        # 记录最小覆盖子串的起始索引及长度
+        start = 0
+        valid_len = float('inf')
+        while right < len(s):
+            c = s[right]	# c 是将移入窗口的字符
+            right += 1		# 右移窗口
+            # 进行窗口内数据的一系列更新
+            if c in need:
+                window[c] = window.get(c, 0) + 1
+                # 验证包含字符的数量
+                if window[c] == need[c]:
+                    valid += 1
+
+            # 判断左侧窗口是否要收缩
+            while valid == len(need):
+                # 在这里更新最小覆盖子串
+                if right - left < valid_len:
+                    start = left
+                    valid_len = right - left
+                d = s[left]	  # d 是将移出窗口的字符
+                left += 1	# 左移窗口
+                # 进行窗口内数据的一系列更新
+                if d in need:
+                    if window[d] == need[d]:
+                        valid -= 1	# 为了停止收缩
+                    window[d] -= 1	# 移出多余的包含字符
+        # 返回最小覆盖子串
+        if valid_len == float('inf'):
+            return ""
+       	else:
+            return s[start:start+valid_len]
+```
+
+需要注意的是：
+
+1. 当我们发现某个字符在`window`的数量满足了`need`的需要，就要更新`valid`，表示有一个字符已经满足要求。而且两次对窗口内数据的更新操作是完全对称的。
+2. 当`valid == len(need)`时，说明`T`中所有字符已经被覆盖，已经得到一个可行的覆盖子串，现在应该开始收缩窗口了，以便得到「最小覆盖子串」。
+3. 移动`left`收缩窗口时，窗口内的字符都是可行解，所以应该在收缩窗口的阶段进行最小覆盖子串的更新，以便从可行解中找到长度最短的最终结果。
+
+#### [567. 字符串的排列](https://leetcode-cn.com/problems/permutation-in-string/)
+
+对于这道题的解法代码，基本上和最小覆盖子串一模一样，只需要改变两个地方：
+
+1. 本题移动`left`缩小窗口的时机是窗口大小大于`len(s2)`时，因为排列嘛，显然长度应该是一样的。
+2. 当发现`valid == len(need)`时，就说明窗口中就是一个合法的排列，所以立即返回`True`。
+
+至于如何处理窗口的扩大和缩小，和最小覆盖子串完全相同。
+
+```python
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        need = Counter(s1)
+        window = {}
+
+        left, right = 0, 0
+        valid = 0
+
+        while right < len(s2):
+            c = s2[right]
+            right += 1
+            if c in need:
+                window[c] = window.get(c, 0) + 1
+                if window[c] == need[c]:
+                    valid += 1
+
+            while right-left >= len(s1):
+                if valid == len(need):
+                    return True
+                d = s2[left]
+                left += 1
+                if d in need:
+                    if window[d] == need[d]:
+                        valid -= 1
+                    window[d] -= 1
+        return False
+```
+
+#### [438. 找到字符串中所有字母异位词](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/)
+
+```python
+def findAnagrams(self, s: str, p: str) -> List[int]:  
+        need = Counter(p)
+        window = {}
+
+        left, right = 0, 0
+        valid = 0
+        res = []
+
+        while right < len(s):
+            c = s[right]
+            right += 1
+            if c in need:
+                window[c] = window.get(c, 0) + 1
+                if window[c] == need[c]:
+                    valid += 1
+            while right-left >= len(p):
+                if valid == len(need):
+                    res.append(left)
+                d = s[left]
+                left += 1
+                if d in need:
+                    if window[d] == need[d]:
+                        valid -= 1
+                    window[d] -= 1
+        return res
+```
+
+#### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+
+这次不需要`need`和`valid`，而且更新窗口内数据也只需要简单的更新计数器`window`即可。
+
+当`window[c]`值大于 1 时，说明窗口中存在重复字符，不符合条件，就该移动`left`缩小窗口了。
+
+唯一需要注意的是，在哪里更新结果`res`呢？我们要的是最长无重复子串，哪一个阶段可以保证窗口中的字符串是没有重复的呢？
+
+这里和之前不一样，**要在收缩窗口完成后更新`res`**，因为窗口收缩的 while 条件是存在重复元素，换句话说收缩完成后一定保证窗口中没有重复。
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        window = {}
+        left, right = 0, 0
+        res = 0
+
+        while right < len(s):
+            c = s[right]
+            right += 1
+            window[c] = window.get(c, 0) + 1
+            # 收缩左侧窗口
+            while window[c] > 1:
+                d = s[left]
+                left += 1
+                window[d] -= 1
+            res = max(res, right-left)
+        return res
+```
+
+
+
+
+
+
 
 # 动态规划专题
 
@@ -1348,6 +2012,7 @@ dp[i][1] = max(dp[i-1][1], -prices[i])
 写出代码：
 
 ```python
+# k = 1
 def maxProfit(prices):
     n = len(prices)
     if n == 0: 
@@ -1364,9 +2029,18 @@ def maxProfit(prices):
 
     for i in range(1, n):
         dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
-        dp[i][1] = max(dp[i-1][1], -prices[i])
-        return dp[n-1][0]
+        dp[i][1] = max(dp[i-1][1], - prices[i])
+    return dp[n-1][0]
 ```
+
+> 对`-prices[i]`的思考：
+>
+> 正常可能第一下想到的是`dp[i-1][0] - prices[i]`，表示的意义是第 i - 1 天无持有，第 i 天买入。
+> 注意这里的 k = 1，也就是只能进行一次交易（买入一次+卖出一次），
+> 在买入后必定伴随着卖出（为了利润最大，最后手里买入的股票都要卖出去），
+> 所以在买入时就会消耗掉一次也是唯一的一次交易机会，故在任何时候的买入前都不会有利润（只能有一次买入），
+> 所以对于第 i - 1 天无持有，第 i 天买入的状态，在第 i 天之前的利润一定都是 0 ，
+> 即在此状态下`dp[i-1][0]`一定为 0（别的状态不一定），所以这里只能是`-prices[i]`而不能是`dp[i-1][0] - prices[i]`
 
 状态压缩：
 
@@ -1390,7 +2064,7 @@ def maxProfit_k_1(prices):
 
 #### 2. [122. 买卖股票的最佳时机 II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
 
-即 **k = inf**的情况：
+即 **k = inf** 的情况：
 如果 k 为正无穷，那么就可以认为 k 和 k - 1 是一样的。可以这样改写框架：
 
 ```python
@@ -1406,6 +2080,28 @@ dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
 写出代码：
 
 ```python
+# k = inf
+def maxProfit(prices):
+    n = len(prices)
+    if n == 0: 
+        return 0
+    dp = [[0] * 2 for _ in range(n)]
+    # dp[0][0] = 0   
+    dp[0][1] = -prices[0]
+
+    for i in range(1, n):
+        dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+        dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
+    return dp[n-1][0]
+```
+
+> 根据对 k = 1时`-prices[i]`的思考，现在 k = inf ，买入和卖出的次数不再受限，
+> 所以`dp[i-1][0] - prices[i]`状态时的`dp[i-1][0]`的值不一定一直为 0 （买卖次数不限），故这里应该加上。
+
+状态压缩：
+
+
+```python
 # k == inf
 def maxProfit_k_1(prices):
     n = len(prices)
@@ -1417,7 +2113,7 @@ def maxProfit_k_1(prices):
     return dp_i_0
 ```
 
-> 其实根据题目的意思，当天卖出以后，当天还可以买入。所以算法可以直接简化为只要今天比昨天大，就卖出。
+> 其实根据题目的意思，当天卖出以后，当天还可以买入。所以算法还可以直接简化为只要今天比昨天大，就卖出。
 >
 > ```python
 > def maxProfit(prices):

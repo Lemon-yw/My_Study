@@ -14,15 +14,13 @@
 
 ### 4. 代码题
 
-#### 单例模式
-
 #### 数组中超过一半的数字
 
 ### 5. 数据库相关
 
-#### having
+#### having、where
 
-#### 左连接
+#### 连接
 
 ### 6. 设计测试用例：抖音视频点赞
 
@@ -32,11 +30,13 @@
 
 ### 1. 一个骰子如何把礼物公平地分给9个人
 
-### 2. 购物车买东西如何正好100块
+用一个骰子扔一次得到x, 再仍一次得到y, 如果x, y都为6就不算, 重来
 
-### 3. 一枚硬币抛8次，5次及以上正面向上的概率
+https://blog.csdn.net/cxxmaker/article/details/7252923
 
-### 4. 设计测试用例：秒杀系统
+### 2. 一枚硬币抛8次，5次及以上正面向上的概率
+
+### 3. 设计测试用例：秒杀系统
 
 ## 三面
 
@@ -90,9 +90,40 @@
 
 ### 3. 英文文章，统计频率最高的10个单词
 
+方法一：将wordlist的word和word的个数放入dict，排序
+
+```python
+import re
+with open('1.txt', 'r') as f:
+	word_dict = {} # 用于统计 word：个数
+	word_list = [] # 用于存放所有单词
+	
+	for line in f.readlines():
+        for word in line.strip().split(" "):
+            word_list.append(re.sub(r"[^a-z]+", "", word.lower()))
+    word_sets = list(set(word_list))   # 确保唯一
+    word_dict = {word: word_list.count(word) for word in word_sets if word}
+    
+result = sorted(word_dict.items(), key=lambda d: d[1], reverse=True)[:10]
+print(result)
+```
+
+方法二：利用collections模块
+
+```python
+import re
+from collections import Counter
+ 
+with open('1.txt', 'r', ) as f:
+    words = f.read()                         # 将文件的内容全部读取成一个字符串
+    # re.split 方法按照能够匹配的子串将字符串分割后返回列表，它的使用形式如下：
+    count = Counter(re.split(r"\W+", words))  # 以单词为分隔
+ 
+result = count.most_common(10)                # 统计最常使用的前10个
+print(result)
+```
+
 ### 4. 职业规划
-
-
 
 # 面经三
 
@@ -126,8 +157,6 @@
 
 ### 5. 代码题
 
-#### 栈
-
 #### 每k个翻转
 
 
@@ -140,8 +169,6 @@
 
 ### 3. 设计测试用例：百度搜索框
 
-
-
 # 面经四
 
 ## 二面
@@ -151,6 +178,14 @@
 #### 动态规划——求最短路径
 
 #### 给一个字符串数组和两个字符串，求它们俩的最小距离
+
+**方法1**：遍历数组 strs，分别记录两个 str1 和 str2 的位置。求得最小的一个距离数字。这样做时间复杂度为 o(n^2)。
+**方法2**：
+如果查询的次数非常多，为了提高查询的效率，构造Hash表，把每次查询的时间复杂度下降到 o(1)。
+Python 的内置 dict 类型就是哈希表，实现方法也是hash 表，其查询的时间复杂度就是 o(1)。哈希表的构造也分很多种：
+比如，构造 Hash 表，key值是strs中的每一个字符串，value值是一个hash表，里面存放着该字符串到其它字符串的最小距离。
+写成代码就是：hash_table = {“*”:{“3”:1, “5”:1, “10”:2, “9”:3, “7”:2, “1”:1}}
+当然这种方法的空间复杂度是 o(n^2)
 
 ### 2. 用到哪些git、Linux命令
 
@@ -176,7 +211,7 @@
 
 ### 2. 代码题
 
-#### 给你一串数字，输出这串数字的一个随机组会，要求每个数字出现在每个位置的概率是一样的
+#### 给你一串数字，输出这串数字的一个随机组合，要求每个数字出现在每个位置的概率是一样的
 
 ## 二面
 
@@ -188,7 +223,7 @@
 
 ### 3. 设计测试用例：抖音的打赏功能
 
-## 4. 什么是反向代理
+### 4. 什么是反向代理
 
 
 

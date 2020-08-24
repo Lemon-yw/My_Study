@@ -1,3 +1,352 @@
+# 排序
+
+## 快速排序
+
+基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。
+
+### 算法描述
+
+1. 从数列中挑出一个元素，称为 “基准”（pivot）；
+2. 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
+3. 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
+
+### 代码实现
+
+## 归并排序
+
+基本思想：先使每个子序列有序，再使子序列段间有序。是递归的思想。
+
+### 算法描述
+
+1. 把长度为n的输入序列分成两个长度为n/2的子序列；
+2. 对这两个子序列分别采用归并排序；
+3. 将两个排序好的子序列合并成一个最终的排序序列。
+
+### 代码实现
+
+```python
+def merge_sort(array):
+    length = len(array)
+    if length < 2:
+        return array
+
+    middle = length // 2
+    left, right = array[0: middle], array[middle:]
+    return merge(merge_sort(left), merge_sort(right))
+
+
+def merge(left, right):
+    result = []
+    while left and right:
+        if left[0] <= right[0]:
+            result.append(left.pop(0))
+        else:
+            result.append(right.pop(0))
+
+    while left:
+        result.append(left.pop(0))
+    while right:
+        result.append(right.pop(0))
+    return result
+```
+
+## 堆排序
+
+基本思想：堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。
+
+### 算法描述
+
+### 时间复杂度 & 稳定性
+
+### 代码实现
+
+## 各排序复杂度 & 稳定性
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi1scxqyh3j310g0ow471.jpg" alt="image-20200824122521381" style="zoom:50%;" />
+
+# 栈实现队列 | 队列实现栈
+
+## [232. 用栈实现队列](https://leetcode-cn.com/problems/implement-queue-using-stacks/)
+
+我们使用两个栈 `s1, s2` 就能实现一个队列的功能：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi14322ur9j30te0ewh0a.jpg" alt="image-20200823222525052" style="zoom: 43%;" />
+
+当调用 `push` 让元素入队时，只要把元素压入 `s1` 即可，比如说 `push` 进 3 个元素分别是 1,2,3，那么底层结构就是这样：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi144fofscj30tc0eqnc3.jpg" alt="image-20200823222649489" style="zoom:43%;" />
+
+那么如果这时候使用 `peek` 查看队头的元素怎么办呢？按道理队头元素应该是 1，但是在 `s1` 中 1 被压在栈底，现在就要轮到 `s2` 起到一个中转的作用了：当 `s2` 为空时，可以把 `s1` 的所有元素取出再添加进 `s2`，**这时候** **`s2`** **中元素就是先进先出顺序了**。
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi1461vcdxj30t00ewtnn.jpg" alt="image-20200823222822595" style="zoom:43%;" />
+
+完整思路：
+
+1. 初始化两个栈结构，stack1为主栈，stack2为辅助栈
+2. push往stack1末尾添加元素，利用append即可实现
+3. pop时候，先将stack1元素向stack2转移，知道stack1只剩下一个元素时候（这就是我们要返回的队列首部元素），然后我们再把stack2中的元素转移回stack1中即可
+4. 类似于步骤（3）的操作，唯一不同是这里我们需要将elenment先添加回stack2，然后再将stack2的元素转移回stack1中，因为peek操作不需要删除队列首部元素
+5. empty判断stack1尺寸即可
+
+完整代码：
+
+```python
+class MyQueue:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.stack1 = []     # 主栈
+        self.stack2 = []     # 辅助栈
+
+    def push(self, x: int) -> None:
+        """
+        Push element x to the back of queue.
+        """
+        self.stack1.append(x)
+
+    def pop(self) -> int:
+        """
+        Removes the element from in front of queue and returns that element.
+        """
+        while len(self.stack1) > 1:
+            self.stack2.append(self.stack1.pop())
+        element = self.stack1.pop()
+        while len(self.stack2) > 0:
+            self.stack1.append(self.stack2.pop())
+        return element
+
+    def peek(self) -> int:
+        """
+        Get the front element.
+        """
+        while len(self.stack1) > 1:
+            self.stack2.append(self.stack1.pop())
+        element = self.stack1.pop()
+        self.stack2.append(element)
+        while len(self.stack2) > 0:
+            self.stack1.append(self.stack2.pop())
+        return element
+
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+        return len(self.stack1) == 0
+```
+
+## [225. 用队列实现栈](https://leetcode-cn.com/problems/implement-stack-using-queues/)
+
+```python
+class MyStack:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.queue = []
+
+
+    def push(self, x: int) -> None:
+        """
+        Push element x onto stack.
+        """
+        self.queue.append(x)
+        queue_len = len(self.queue)
+        while queue_len > 1:
+            #反转前n-1个元素，栈顶元素始终保留在队首
+            self.queue.append(self.queue.pop(0))
+            queue_len -= 1
+
+
+    def pop(self) -> int:
+        """
+        Removes the element on top of the stack and returns that element.
+        """
+        return self.queue.pop(0)
+
+
+    def top(self) -> int:
+        """
+        Get the top element.
+        """
+        return self.queue[0]
+
+
+    def empty(self) -> bool:
+        """
+        Returns whether the stack is empty.
+        """
+        return len(self.queue) == 0
+```
+
+# 反转链表
+
+## 反转整个链表
+
+### [206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list/)
+
+先看代码：
+
+```python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        # 递归
+        if not head or not head.next:
+            return head
+        
+        last_node = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+        return last_node
+```
+
+**对于递归算法，最重要的就是明确递归函数的定义**。具体来说，我们的 `reverse` 函数定义是这样的：
+
+输入一个节点`head`，将「以`head`为起点」的链表反转，并返回反转之后的头结点。
+
+明白了函数的定义，在来看这个问题。比如说我们想反转这个链表：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi160qju4dj31380bqncg.jpg" alt="image-20200823233228072" style="zoom:45%;" />
+
+那么输入 `self.reverseList(head)` 后，会在这里进行递归：
+
+```python
+last_node = self.reverseList(head.next)
+```
+
+不要跳进递归（你的脑袋能压几个栈呀？），而是要根据刚才的函数定义，来弄清楚这段代码会产生什么结果：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi163b58izj314e09e15z.jpg" alt="image-20200823233456524" style="zoom:50%;" />
+
+这个 `self.reverseList(head.next)`执行完成后，整个链表就成了这样：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi164ww2m8j31200bs4dt.jpg" alt="image-20200823233629072" style="zoom:50%;" />
+
+并且根据函数定义，`reverseList` 函数会返回反转之后的头结点，我们用变量 `last_node` 接收了。
+
+现在再来看下面的代码：
+
+```python
+head.next.next = head
+```
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi16661zn2j30zc0fa4hd.jpg" alt="image-20200823233741464" style="zoom:50%;" />
+
+接下来：
+
+```python
+head.next = None
+return last_node
+```
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi167m5a70j314i0g61eq.jpg" alt="image-20200823233904831" style="zoom:35%;" />
+
+这样整个链表就反转过来了！不过其中有两个地方需要注意：
+
+1. 递归函数要有 base case，也就是这句：
+
+```python
+if not head.next: return head
+```
+
+意思是如果链表只有一个节点的时候反转也是它自己，直接返回即可。
+
+2. 当链表递归反转之后，新的头结点是 `last_node`，而之前的 `head` 变成了最后一个节点，别忘了链表的末尾要指向 None：
+
+```python
+head.next = None
+```
+
+另外也可以迭代实现：
+
+```python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        # 迭代
+        pre = None
+        cur = head
+
+        while cur:
+            temp = cur.next
+            cur.next = pre
+            pre = cur
+            cur = temp
+        return pre
+```
+
+
+
+## 反转链表前n个节点
+
+比如说对于下图链表，执行 `reverseN(head, 3)`：
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi16lj9htyj312o0kohcn.jpg" alt="image-20200823235227739" style="zoom: 40%;" />
+
+解决思路和反转整个链表差不多，只要稍加修改即可：
+
+1. base case 变为 `n == 1`，反转一个元素，就是它本身，同时**要记录后驱节点**。
+2. 刚才我们直接把 `head.next` 设置为 None，因为整个链表反转后原来的 `head` 变成了整个链表的最后一个节点。但现在 `head` 节点在递归反转之后不一定是最后一个节点了，所以要记录后驱 `successor`（第 n + 1 个节点），反转之后将 `head` 连接上。
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi16n3d6k9j315q0dywxf.jpg" alt="image-20200823235357029" style="zoom:40%;" />
+
+```python
+successor = None # 后驱节点
+
+# 反转以 head 为起点的 n 个节点，返回新的头结点
+def reverseN(head, n):
+    if n == 1:
+        successor = head.next	# 记录第 n + 1 个节点
+        return head
+    # 以 head.next 为起点，需要反转前 n - 1 个节点
+    last = reverseN(head.next, n - 1)
+	# 反转 head 节点
+    head.next.next = head
+    # 让反转之后的 head 节点和后面的节点连起来
+    head.next = successor
+    return last
+```
+
+
+
+## 反转链表的一部分
+
+### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+
+首先，如果 `m == 1`，就相当于反转链表开头的 `n` 个元素，也就是我们刚才实现的功能；
+
+如果 `m != 1` 怎么办？如果我们把 `head` 的索引视为 1，那么我们是想从第 `m` 个元素开始反转；如果把 `head.next` 的索引视为 1 呢？那么相对于 `head.next`，反转的区间应该是从第 `m - 1` 个元素开始的；那么对于 `head.next.next` 呢……
+
+区别于迭代思想，这就是递归思想，所以我们可以完成代码：
+
+```python
+class Solution:
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        # 反转以 head 为起点的 n 个节点，返回新的头结点
+        def reverseN(head, n):
+            if n == 1:
+                successor = head.next # 拿到后继(第 n+1 个)节点
+                return head, successor
+            # 以 head.next 为起点，需要反转前 n - 1 个节点
+            last, successor = reverseN(head.next, n-1)
+
+            # 反转 head 节点
+            head.next.next = head
+            # 让反转之后的 head 节点和后继节点连起来
+            head.next = successor
+            return last, successor
+
+        if m == 1: # 递归终止条件
+            res, _ = reverseN(head, n)
+            return res
+        # 如果不是第一个，那么以下一个为头结点开始递归，直到触发条件
+        head.next = self.reverseBetween(head.next, m-1, n-1)
+        return head
+```
+
+
+
 # 二叉树专题
 
 ## BFS(层序遍历)框架

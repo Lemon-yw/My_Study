@@ -7,10 +7,50 @@
 ### 算法描述
 
 1. 从数列中挑出一个元素，称为 “基准”（pivot）；
-2. 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
+2. 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的正确位置。这个称为分区（partition）操作；
 3. 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
 
 ### 代码实现
+
+```python
+def quick_sort(start_index, end_index, array):
+    # 递归的结束条件
+    if start_index >= end_index:
+        return
+    # 得到基准元素的位置
+    pivot_index = partition_v1(start_index, end_index, array)
+    # 根据基准元素位置，分成两部分进行排序
+    quick_sort(start_index, pivot_index-1, array)
+    quick_sort(pivot_index+1, end_index, array)
+
+
+def partition_v1(start_index, end_index, array):
+    # 取第一个元素作为基准元素
+    pivot = array[start_index]
+    left = start_index
+    right = end_index
+
+    while left != right:
+        # 控制right指针比较并左移
+        while left < right and array[right] > pivot:
+            right -= 1
+        # 控制left指针比较并右移
+        while left < right and array[left] <= pivot:
+            left += 1
+        # 交换left和right指向的元素
+        if left < right:
+            array[left], array[right] = array[right], array[left]
+    # pivot和指针重合点交换(注意不能直接用pivot的值进行交换，改变pivot的值没有意义)
+    array[start_index], array[left] = array[left], array[start_index]
+    return left
+```
+
+**注意**
+
+1. **指针移动的先后顺序**：**指针要从基准元素的另一方向指针开始移动**，即从右指针开始移动，由于基准元素从左侧开始（若基准元素从右侧开始则先移动左指针），若从左指针开始移动，执行顺序会以左指针的位置为主，左指针会先停下，然后限制右指针的移动，而由于左指针最后停下的位置一定是left+1之后大于pivot时停下，也就是说此时左指针停下位置的元素值是大于pivot的，不符合预期，所以要先从右指针开始移动，保证了先停下的指针位置的值是小于等于pivot的。
+2. **等号的归属**：**等号要从基准元素侧的指针开始**，即等号从左指针开始，由于基准元素从左侧开始（若基准元素从右侧开始则等号从右指针开始），为了防止pivot位置被移动，即避免左指针一直停留在pivot位置时被换位，所以在相等时要往后移一位。
+
+
 
 ## 归并排序
 
@@ -50,19 +90,23 @@ def merge(left, right):
     return result
 ```
 
+
+
 ## 堆排序
 
 基本思想：堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。
 
 ### 算法描述
 
-### 时间复杂度 & 稳定性
-
 ### 代码实现
+
+
 
 ## 各排序复杂度 & 稳定性
 
 <img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gi1scxqyh3j310g0ow471.jpg" alt="image-20200824122521381" style="zoom:50%;" />
+
+
 
 # 栈实现队列 | 队列实现栈
 
@@ -180,6 +224,8 @@ class MyStack:
         """
         return len(self.queue) == 0
 ```
+
+
 
 # 反转链表
 
@@ -380,19 +426,19 @@ def BFS(start, target):
         # 将每个还没有搜索到的点依次放入队列，再弹出队列的头部元素当做当前遍历点 
         # for 节点 in cur的所有相邻节点:
         #    if 该节点有效且未被访问过:
-        #		 		queue.append(该节点)
+        #		 	queue.append(该节点)
         for _ in range(sz):
             cur = q.popleft()
             # 划重点：这里判断是否到达终点
             if cur == target:
                 return step
             # 将 cur 的相邻节点加入队列
-  					if cur.left and cur.left not in visited: 
-  						q.append(cur.left)
-						  visited.add(cur.left)
-  					if cur.right and cur.right not in visited: 
-  						q.append(cur.right)
-						  visited.add(cur.right)
+            if cur.left and cur.left not in visited: 
+                q.append(cur.left)
+                visited.add(cur.left)
+            if cur.right and cur.right not in visited: 
+                q.append(cur.right)
+                visited.add(cur.right)
         # 划重点：更新步数在这里
         step += 1
 ```
@@ -423,7 +469,7 @@ class Solution:
         while q:
             sz = len(q)
             # 将每个还没有搜索到的点依次放入队列，再弹出队列的头部元素当做当前遍历点 
-            for i in range(sz):
+            for _ in range(sz):
                 cur = q.popleft()
                 # 判断是否到达终点
                 if not cur.left and not cur.right:
@@ -564,6 +610,34 @@ def traverse(root):
        return isSameTree(root1.left, root2.left)
            and isSameTree(root1.right, root2.right);
    ```
+
+3. #### [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
+
+   ```python
+   # Definition for a binary tree node.
+   # class TreeNode:
+   #     def __init__(self, x):
+   #         self.val = x
+   #         self.left = None
+   #         self.right = None
+   
+   class Solution:
+       def isSymmetric(self, root: TreeNode) -> bool:
+           def isSame(left, right):
+               if not left and not right:
+                   return True
+               if not left or not right:
+                   return False
+               if left.val != right.val:
+                   return False           
+               return isSame(left.left, right.right) and isSame(left.right, right.left)
+           
+           if not root:
+               return True
+           return isSame(root.left, root.right)
+   ```
+
+   
 
 ### 验证BST
 
@@ -782,6 +856,8 @@ def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
        if root.val > target:
            BST(root.left, target)
    ```
+
+
 
 # 回溯算法专题
 
@@ -1050,7 +1126,7 @@ class Solution:
 def binary_search(nums, target):
     left, right = 0, len(nums) - 1 
     while left <= right:
-        mid = (right - left) // 2
+        mid = left + (right - left) // 2
         if nums[mid] < target:
             left = mid + 1
         elif nums[mid] > target:
@@ -1065,7 +1141,7 @@ def binary_search(nums, target):
 def left_bound(nums, target):
     left, right = 0, len(nums) - 1
     while left <= right:
-        mid = (right - left) // 2
+        mid = left + (right - left) // 2
         if nums[mid] < target:
             left = mid + 1
         elif nums[mid] > target:
@@ -1082,7 +1158,7 @@ def left_bound(nums, target):
 def right_bound(nums, target):        
     left, right = 0, len(nums) - 1
     while left <= right:
-        mid = (right - left) // 2
+        mid = left + (right - left) // 2
         if nums[mid] < target:
             left = mid + 1
         elif nums[mid] > target:
@@ -1444,10 +1520,6 @@ class Solution:
 
 
 
-
-
-
-
 # 动态规划专题
 
 动态规划问题的一般形式就是**求最值**。求解动态规划的核心问题是**穷举**。
@@ -1698,9 +1770,8 @@ class Solution:
             return 0
         
         # base case
-        dp_0 = nums[0]
+        res = dp_0 = nums[0]
         dp_1 = 0
-        res = dp_0
         for i in range(1, length):
             # dp[i] = max(nums[i], nums[i] + dp[i-1])
             dp_1 = max(nums[i], nums[i] + dp_0)
@@ -2474,4 +2545,121 @@ def maxProfit_k_1(prices):
 >                 total += prices[i] - prices[i-1]
 >         return total
 > ```
+
+
+
+# 面试题记录
+
+## [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
+
+```python
+class Solution:    
+    def merge(self, A: List[int], m: int, B: List[int], n: int) -> None:
+        res = []
+        i, j = 0, 0
+        while i < len(A) and j < len(B):
+            if A[i] < B[j]:
+                res.append(A[i])
+                i += 1
+            else:
+                res.append(B[j])
+                j += 1
+        if i < j:
+            res.extend(A[i:])
+        if i > j:
+            res.extend(B[j:])
+        return res
+```
+
+**优化：不申请额外空间**
+
+```python
+class Solution:
+    def merge(self, A: List[int], m: int, B: List[int], n: int) -> None:
+        """
+        Do not return anything, modify A in-place instead.
+        """
+        index_a = m - 1	 # 对 A 中元素倒序遍历，指针从最后元素位置开始 
+        cur = m + n - 1  # 添加 cur 指针追踪位置，从 A 列表末尾开始追踪
+        while index_a > -1:
+            if B and A[index_a] < B[-1]:
+                A[cur] = B.pop()
+                cur -= 1
+            else:
+                A[cur] = A[index_a]
+                cur -= 1
+                index_a -= 1
+        if B:
+            A[:len(B)] = B  # 比较完B还有剩下的，全填到A前面即可
+        return A
+```
+
+## [905. 按奇偶排序数组](https://leetcode-cn.com/problems/sort-array-by-parity/)
+
+```python
+class Solution:
+    def sortArrayByParity(self, A: List[int]) -> List[int]:
+        res1 = []
+        res2 = []      
+        for i in range(len(A)):
+            if A[i] % 2 == 0:
+                res1.append(A[i])
+            else:
+                res2.append(A[i])
+        res1.extend(res2)
+        return res1
+```
+
+**优化1：不申请额外空间**
+
+```python
+# 左右指针
+class Solution:
+    def sortArrayByParity(self, A: List[int]) -> List[int]:
+        i, j = 0, len(A) - 1
+        while i < j:
+            if A[i] % 2 == 1 and A[j] % 2 == 0:
+                A[i], A[j] = A[j], A[i]
+                i += 1
+                j -= 1
+            elif A[i] % 2 == 0:
+                i += 1
+            elif A[j] % 2 == 1:
+                j -= 1
+        return A
+```
+
+**优化2：不改变相对顺序**
+
+```python
+# 快慢指针
+class Solution:
+    def sortArrayByParity(self, A: List[int]) -> List[int]:
+        i = 0
+        for j in range(len(A)):
+            if A[j] % 2 == 0:
+                A[i], A[j] = A[j], A[i]
+                i += 1
+        return A
+```
+
+## [236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+```python
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if not root or root == p or root == q: 
+            return root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        # 1.当 left 和 right 同时为空:说明 root 的左 / 右子树中都不包含 p,q，返回 None
+        if not left and not right: 
+            return
+        # 3.当 left 为空，right 不为空：p,q 都不在 root 的左子树中，直接返回 right
+        if not left:
+            return right 
+        if not right: 
+            return left # 4. 与 3 同理
+        return root # 2. if left and right:
+```
 

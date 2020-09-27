@@ -815,28 +815,29 @@ def deleteNode(root, key):
 
 ```python
 def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
-        if not root: return None
-        if key == root.val:
-            # key 两个子节点都为空 or 只有一个非空子节点
-            if not root.left: return root.right
-            if not root.right: return root.left
-            # key 有两个子节点
-            # 找到右子树的最小节点
-            min_node = self.getMin(root.right)
-            # 把 root 改成 min_node
-            root.val = min_node.val
-            # 转而去删除 min_node
-            root.right = self.deleteNode(root.right, min_node.val)
-        elif key < root.val:
-            root.left = self.deleteNode(root.left, key)
-        else:
-            root.right = self.deleteNode(root.right, key)
-        return root
+    if not root: return None
+    if key == root.val:
+        # key 两个子节点都为空 or 只有一个非空子节点
+        if not root.left: return root.right
+        if not root.right: return root.left
+        # key 有两个子节点
+        # 找到右子树的最小节点
+        min_node = self.getMin(root.right)
+        # 把 root 改成 min_node
+        root.val = min_node.val
+        # 转而去删除 min_node
+        root.right = self.deleteNode(root.right, min_node.val)
+    elif key < root.val:
+        root.left = self.deleteNode(root.left, key)
+    else:
+        root.right = self.deleteNode(root.right, key)
+    return root
 
-    def getMin(self, root):
-        while root.left:
-            root = root.left
-        return root
+
+def getMin(self, root):
+    while root.left:
+        root = root.left
+    return root
 ```
 
 ### 二叉树算法的设计框架总结

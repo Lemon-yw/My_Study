@@ -29,7 +29,7 @@ class Solution:
 ## 项目总结
 
 1. 俄罗斯车牌展示&车牌支持富文本
-  需求背景：对俄罗斯车牌进行格式化处理，并针对不同国家的车牌可能存在的特殊样式，通过提供通用性能力解决。
+    需求背景：对俄罗斯车牌进行格式化处理，并针对不同国家的车牌可能存在的特殊样式，通过提供通用性能力解决。
   主要职责：测试接口新增字段在正常或者异常情况能否显示正确，并保证字段格式的设置与端正常交互。
 
 2. 国际化闪送支持发多单
@@ -286,19 +286,35 @@ https://blog.csdn.net/qq_43669007/article/details/107347490?utm_medium=distribut
 
   * 在excel中输入请求的地址、方法、common参数、校验返回的断言等，一些私参不输入具体值，用占位符表示
   * 通过请求数据构造的服务器获得私参值
-  * 在代码中使用pytest.mark.parametrize装饰器将case导入，与之前获取的私参值一起通过request这个模块请求测试环境的服务器，获得接口返回
+  * 在代码中使用pytest.mark.parametrize装饰器将case导入，实现测试用例的参数化，与之前获取的私参值一起通过request这个模块请求测试环境的服务器，获得接口返回
   * 校验返回的参数
 
+  > ```python
+  > @pytest.mark.parametrize(argnames, argvalues)
+  > # 参数：
+  > # argnames:以逗号分隔的字符串
+  > # argvaluse: 参数值列表，若有多个参数，一组参数以元组形式存在，包含多组参数的所有参数
+  > # 以元组列表形式存在
+  > 
+  > ## 如果想获得多个参数化参数的所有组合，可以通过堆叠参数化装饰器实现 ## 
+  > @pytest.mark.parametrize("x",["a","b"])
+  > @pytest.mark.parametrize("y",[2,3])
+  > def test_foo(x,y):
+  >     print("测试数据组合:x->%s,y->%s"%(x,y))
+  > if __name__=="__main__":
+  >     pytest.main(["-s","test_canshu.py"])
+  > ```
+  >
   > request模块
   >
   > ```python
   > res = requests.request(
-  >     method=case['METHOD'],
-  >     url=get_sim_domain(ENV) + case['URL'],
-  >     params=json2dict(case['PARAMS']),
-  >     # headers=json2dict(case['HEADERS']),
-  >     data=json2dict(case['DATA']),
-  >     json=json2dict(case['JSON'])).json()
+  >  method=case['METHOD'],
+  >  url=get_sim_domain(ENV) + case['URL'],
+  >  params=json2dict(case['PARAMS']),
+  >  # headers=json2dict(case['HEADERS']),
+  >  data=json2dict(case['DATA']),
+  >  json=json2dict(case['JSON'])).json()
   > ```
 
 ### 如何理解压力、负载、性能测试？
@@ -348,6 +364,22 @@ class Solution:
 
 
 
+## 定位问题
+
+1. 某地头条用户突然不能刷是什么原因?
+2. 看视频突然断网了什么原因？
+
+## MVC 框架模式
+
+MVC全名是**Model View Controller**，是模型(model)－视图(view)－控制器(controller)的缩写，一种软件设计典范，用于组织代码用一种**业务逻辑和数据显示分离的方法**，这个方法的假设前提是如果业务逻辑被聚集到一个部件里面，而且界面和用户围绕数据的交互能被改进和个性化定制而不需要重新编写业务逻辑。MVC被独特的发展起来**用于映射传统的输入、处理和输出功能在一个逻辑的图形化用户界面**的结构中。
+MVC是一个框架模式，它**强制性的使应用程序的输入、处理和输出分开**。使用MVC应用程序被分成三个核心部件：**模型、视图、控制器**。它们各自处理自己的任务。
+
+>   Model 是指要处理的业务逻辑和数据操作，它接收视图请求的数据并返回最终的处理结果；
+>   View 视图主要是指的跟用户打交道并且显示给用户看的，用户看到并与之交互的界面；
+>   Controller 看成是Model和View的桥梁，枢纽，响应请求，处理跳转，使模型和视图保持一致。
+
+
+
 
 
 # 项目总结
@@ -373,7 +405,7 @@ class Solution:
 1. 强化学习中训练集的设计与实现
 利用算法生成了符合要求的训练集，借鉴了Google DeepMind对于解决推荐系统在大规模离散空间下训练问题的方法，采用了k近邻算法及贪婪策略进行训练集的分类与选取，并输入到神经网络进行训练；
 2. 动态拓扑的设计
-  在仿真初始环境中搭建全连接的网络拓扑，通过读取强化学习训练中产生的拓扑邻接矩阵来决定节点链路连接的通断以实现构建不同的网络拓扑环境；
+    在仿真初始环境中搭建全连接的网络拓扑，通过读取强化学习训练中产生的拓扑邻接矩阵来决定节点链路连接的通断以实现构建不同的网络拓扑环境；
 3. 模型的训练与测试
   * 在不同流量下(25%、50%、75%...)分别训练模型，其网络时延平均值整体均随训练时间的增加呈逐步降低趋势，最后基本趋于稳定达到收敛；
   * 将训练模型分别与采用随机和贪婪策略生成拓扑的模型进行对比，在降低时延方面呈现出明显优越性；
@@ -1461,9 +1493,9 @@ find [查找目录] [查找规则] [查找完后的操作]
 用于在文件树中查找文件，并做相应的处理，(有可能访问磁盘)。
 
 3. 命令参数
-  （1）pathname：表示所要查找的目录路径,例如”.”表示当前目录，”/”表示根目录。
-  （2）-print：将find找到的文件输出到标准输出。
-  （3）-exec：对找到的文件执行exec这个参数所指定的shell命令，相应的形式为：-exec command {} \; 
+    （1）pathname：表示所要查找的目录路径,例如”.”表示当前目录，”/”表示根目录。
+    （2）-print：将find找到的文件输出到标准输出。
+    （3）-exec：对找到的文件执行exec这个参数所指定的shell命令，相应的形式为：-exec command {} \; 
 
   ​					  将查到的文件进行command操作，”{}”就代替查到的文件。
 
@@ -2024,14 +2056,11 @@ class Solution:
 ```python
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
-        queue = collections.deque()
-        queue.append(root)
-        res = []
+        queue, res = [root], []
         while queue:
-            size = len(queue)
             level = []
-            for _ in range(size):
-                cur = queue.popleft()
+            for _ in range(len(queue)):
+                cur = queue.pop(0)
                 if not cur:
                     continue
                 level.append(cur.val)
@@ -3245,7 +3274,7 @@ class Solution:
 
 滑动窗口算法无非就是双指针形成的窗口扫描整个数组/子串，但关键是，你得清楚地知道什么时候应该移动右侧指针来扩大窗口，什么时候移动左侧指针来减小窗口。
 
-而对于这道题目，你想想，当窗口扩大的时候可能遇到负数，窗口中的值也就可能增加也可能减少，这种情况下不知道什么时机去收缩左侧窗口，也就无法求出「最大子数组和」。
+而对于这道题目，当窗口扩大的时候可能遇到负数，窗口中的值也就可能增加也可能减少，这种情况下不知道什么时机去收缩左侧窗口，也就无法求出「最大子数组和」。
 
 解决这个问题需要动态规划技巧，但是 `dp` 数组的定义比较特殊。按照我们常规的动态规划思路，一般是这样定义 `dp` 数组：
 
@@ -3308,7 +3337,7 @@ class Solution:
         
         # base case
         res = dp_0 = nums[0]
-        dp_1 = 0
+        
         for i in range(1, length):
             # dp[i] = max(nums[i], nums[i] + dp[i-1])
             dp_1 = max(nums[i], nums[i] + dp_0)

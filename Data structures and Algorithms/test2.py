@@ -1,15 +1,11 @@
-def test(A, B, mod):
-    res = float('inf')
-    for x in A:
-        for y in B:
-            temp2 = (x + y) % mod
-            if temp2 < res:
-                res = temp2
-    return res
+def bubble_sort(array):
+    length = len(array)
+    for i in range(length - 1):
+        for j in range(length - i - 1):
+            if array[j] > array[j + 1]:
+                array[j], array[j + 1] = array[j + 1], array[j]
+    return array
 
 
-if __name__ == '__main__':
-    n, m, mod = map(int, input().strip().split())
-    A = [i for i in map(int, input().strip().split())]
-    B = [i for i in map(int, input().strip().split())]
-    print(test(A, B, mod))
+nums = [3, 2, 5, 4]
+print(bubble_sort(nums))

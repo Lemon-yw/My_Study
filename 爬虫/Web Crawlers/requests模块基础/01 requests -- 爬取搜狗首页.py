@@ -16,6 +16,6 @@ if __name__ == '__main__':
     page_text = response.text
     print(page_text)
     # 4. 持久化存储
-    with open('./sogou.html', 'w', encoding='utf-8') as fp:
+    with open('sogou.html', 'w', encoding='utf-8') as fp:
         fp.write(page_text)
     print('爬取数据结束!!!')

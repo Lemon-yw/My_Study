@@ -1,5 +1,5 @@
 """
-Case: 爬取https://www.redecor.com/首页每个challenge的详情 -- 图片
+Case: 爬取 https://reworks.fi/首页每个challenge的详情 -- 图片
 Author: yangwen
 Time: 2020/11/30 9:48 下午
 """
@@ -20,7 +20,7 @@ def get_home_challenge(fig_id, fig_title):
     count = 0
 
     # 爬取页面challenge详情 #
-    fig_id_url = 'https://www.redecor.com/challenge/' + fig_id
+    fig_id_url = 'https://reworks.fi/challenge/' + fig_id
     fig_detail_text = requests.get(url=fig_id_url, headers=headers).text
     detail_tree = etree.HTML(fig_detail_text)
     detail_div_list = detail_tree.xpath('//div[@class="columns is-multiline is-mobile"]/div')
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     }
 
     # # 爬取初始页面图片详情 #
-    # url = 'https://www.redecor.com/'
+    # url = 'https://reworks.fi/'
     # # 获取首页数据
     # page_text = requests.get(url=url, headers=headers).text
     # # 进行数据解析

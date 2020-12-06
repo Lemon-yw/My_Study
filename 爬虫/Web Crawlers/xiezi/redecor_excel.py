@@ -20,7 +20,7 @@ if __name__ == '__main__':
     count = 0
 
     # 爬取首页图片 #
-    url = 'https://www.redecor.com/'
+    url = 'https://reworks.fi/'
     # 获取首页数据
     page_text = requests.get(url=url, headers=headers).text
     # 使用xpath进行数据解析

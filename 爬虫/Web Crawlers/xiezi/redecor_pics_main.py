@@ -1,5 +1,5 @@
 """
-Case: 爬取https://www.redecor.com/首页全部的challenge详情 -- 图片
+Case: 爬取 https://reworks.fi/首页全部的challenge详情 -- 图片
 Author: yangwen
 Time: 2020/11/30 9:48 下午
 """
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     count = 0
 
     # # 爬取初始页面challenge详情 #
-    # url = 'https://www.redecor.com/'
+    # url = 'https://reworks.fi/'
     # # 获取首页数据
     # page_text = requests.get(url=url, headers=headers).text
     # # 使用xpath进行数据解析

@@ -1,0 +1,13 @@
+{
+  'id': '3689',
+  'title': 'Scene the Serenity',
+  'dateEnd': 1606413600000,
+  'thumb': 'https://thumb3.cdn.redecor.com/2011/0h_HYlVq_800_oW3n.jpg',
+  'designs': [
+    {
+      'thumb': 'https://d.redecor.com/2011/VWPq3ad4_800_8zsl.jpg',
+      '__typename': 'Design'
+    }
+  ],
+  '__typename': 'Challenge'
+}

@@ -22,6 +22,7 @@ if __name__ == '__main__':
     # 数据解析：src属性值、alt属性值
     tree = etree.HTML(page_text)
     li_list = tree.xpath('//div[@class="slist"]//li')
+    # print(li_list)
     for li in li_list:
         img_src = 'http://pic.netbian.com' + li.xpath('./a/img/@src')[0]
         img_name = li.xpath('./a/img/@alt')[0] + '.jpg'

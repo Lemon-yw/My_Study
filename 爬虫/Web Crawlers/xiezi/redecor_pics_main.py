@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # page_text = requests.get(url=url, headers=headers).text
     # # 使用xpath进行数据解析
     # tree = etree.HTML(page_text)
-    # div_list = tree.xpath('//div[@class="columns is-multiline"]/div')
+    # div_list = tree.xpth('//div[@class="columns is-multiline"]/div')
     # for div in div_list:
     #     fig_title = div.xpath('./figure/@title')[0] + '.jpg'
     #     attr_style = div.xpath('./figure/@style')[0]
@@ -51,9 +51,12 @@ if __name__ == '__main__':
     # 获取第一个fig_id
     # a_href = div_list[-1].xpath('.//a/@href')[0]
     # fig_id = re.findall(r'\d+', a_href)[0]
-    fig_id = "2007"     # (60th load)
+    # fig_id = "2007"     # (60th load)
     # episode = 60
-    count += 1050
+    # count += 1050
+
+    fig_id = "2011"
+    count += 1068
     # 获取动态加载数据
     try:
         while True:
@@ -70,7 +73,7 @@ if __name__ == '__main__':
                                 "__typename\n    }\n    __typename\n  }\n}\n"}
             fig_json = requests.post(url=post_url, headers=headers, data=json.dumps(payload)).json()
             challenges_list = fig_json['data']['listChallenges']
-            # 更新fig_id
+            # 获取最后一个fig_id， 作为下一次请求的after参数
             fig_id = challenges_list[-1]['id']
             # episode += 1
             # 图片存储

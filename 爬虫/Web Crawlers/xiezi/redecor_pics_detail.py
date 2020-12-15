@@ -11,6 +11,20 @@ import json
 from lxml import etree
 
 
+def url_check(url):
+    ex_thumb = r'.*?//(.*?).cdn.*?'
+    ex_d = r'.*?com/(.*?)/.*?'
+    url_thumb = re.findall(ex_thumb, url, re.S)
+    url_d = re.findall(ex_d, url, re.S)
+
+    if url_thumb and 'thumb3' == url_thumb[0]:
+        return
+    elif url_d and 'd' == url_d[0]:
+        return
+    else:
+        return 1
+
+
 def get_home_challenge(fig_id, fig_title):
     # 新建文件夹用于存储每个challenge的图片集
     fig_dir_path = './redecor_pics_detail/%s' % fig_title
@@ -25,19 +39,29 @@ def get_home_challenge(fig_id, fig_title):
     detail_tree = etree.HTML(fig_detail_text)
     detail_div_list = detail_tree.xpath('//div[@class="columns is-multiline is-mobile"]/div')
     for detail_div in detail_div_list:
-        # 获取每个card的图片
+        # 获取每个column的图片
         fig_detail_src = detail_div.xpath('.//img/@src')[0]
+        # print('fig_detail_src:', fig_detail_src)
+        # try:
+        #     fig_detail_data = requests.get(url=fig_detail_src, headers=headers).content
+        # except:
+        #     print('图片地址解析错误！！！ Try next...')
+        #     continue
+        if not url_check(fig_detail_src):
+            # 错误图片地址
+            print('错误图片地址！！！ Try next...')
+            continue
         try:
             fig_detail_data = requests.get(url=fig_detail_src, headers=headers).content
         except:
-            print('图片地址解析错误！！！ Try next...')
+            print(fig_detail_src, '图片地址解析错误！！！ Try next...')
             continue
         # 每个challenge爬取30张图片
         if count >= 30:
             break
         else:
             count += 1
-        # 获取每个card的作者名
+        # 获取每个column的作者名
         fig_detail_author = detail_div.xpath('.//h6/text()')[0] + '.jpg'
         if '/' in fig_detail_author:
             fig_detail_author = fig_detail_author.replace('/', '*')
@@ -70,7 +94,7 @@ def get_dyna_challenge(last_fig_id):
                                 "__typename\n    }\n    __typename\n  }\n}\n"}
             fig_json = requests.post(url=post_url, headers=headers, data=json.dumps(payload)).json()
             challenges_list = fig_json['data']['listChallenges']
-            # 更新最后一个fig_id
+            # 获取最后一个fig_id， 作为下一次请求的after参数
             last_fig_id = challenges_list[-1]['id']
             # 记录第一个fig_id
             detail_fig_id = challenges_list[0]['id']
@@ -118,7 +142,6 @@ if __name__ == '__main__':
     #         continue
     #     a_href = div.xpath('.//a/@href')[0]
     #     fig_id = re.findall(r'\d+', a_href)[0]
-    #     print('fig_id:', fig_id)
     #     fig_title = div.xpath('./figure/@title')[0]
     #     get_home_challenge(fig_id, fig_title)
     print("------------------------首页图片爬取结束------------------------")
@@ -127,7 +150,7 @@ if __name__ == '__main__':
     # 获取第一个fig_id
     # a_href = div_list[-1].xpath('.//a/@href')[0]
     # last_fig_id = re.findall(r'\d+', a_href)[0]
-    last_fig_id = '2320'
+    last_fig_id = '93'
 
     # final fig_id -- stop
     # fig_id = "2007"     # (60th load)
@@ -136,29 +159,6 @@ if __name__ == '__main__':
 
     # 获取动态加载数据
     try:
-        # while True:
-        #     post_url = 'https://api.redecor.com/graphql'
-        #     # 请求新图片依赖参数: "after": fig_id (最后一张图片)
-        #     payload = {"operationName": "ALL_CHALLENGES_QUERY",
-        #                "variables": {"type": "closed", "after": last_fig_id, "limit": 18},
-        #                "query": "query ALL_CHALLENGES_QUERY($type: ChallengeState = all, "
-        #                         "$after: ID = null, $limit: Int = 18) "
-        #                         "{\n  listChallenges(type: $type, after: $after, limit: $limit) {\n    id\n    title\n "
-        #                         "dateEnd\n    thumb\n    designs(limit: 1, orderBy: rating) {\n      thumb\n      "
-        #                         "__typename\n    }\n    __typename\n  }\n}\n"}
-        #     fig_json = requests.post(url=post_url, headers=headers, data=json.dumps(payload)).json()
-        #     challenges_list = fig_json['data']['listChallenges']
-        #     # 更新最后一个fig_id
-        #     last_fig_id = challenges_list[-1]['id']
-        #     # print('last_fig_id:', last_fig_id)
-        #     # 图片的获取与存储
-        #     for challenges in challenges_list:
-        #         detail_fig_id = challenges['id']
-        #         pre_fig_id = detail_fig_id
-        #         print('detail_fig_id:', detail_fig_id)
-        #         detail_fig_title = challenges['title']
-        #         get_home_challenge(detail_fig_id, detail_fig_title)
-        #     print("-----------------------Load more Challenges-----------------------")
         for _ in range(1, 10000):
             last_fig_id = get_dyna_challenge(last_fig_id)
             print('last_fig_id:', last_fig_id)

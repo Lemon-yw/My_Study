@@ -1,13 +1,240 @@
 {
-  'id': '3689',
-  'title': 'Scene the Serenity',
-  'dateEnd': 1606413600000,
-  'thumb': 'https://thumb3.cdn.redecor.com/2011/0h_HYlVq_800_oW3n.jpg',
-  'designs': [
-    {
-      'thumb': 'https://d.redecor.com/2011/VWPq3ad4_800_8zsl.jpg',
-      '__typename': 'Design'
-    }
-  ],
-  '__typename': 'Challenge'
+  'data': {
+    'listChallenges': [
+      {
+        'id': '3774',
+        'title': 'Truth in the Details',
+        'dateEnd': 1607040000000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/WWlWW6_N_800_IIsT.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/8WZcJ6NR_800_ehHC.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3763',
+        'title': 'Trust Your Uniqueness',
+        'dateEnd': 1607029200000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/_TgEBqhr_800_pcGN.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/avm5LfTV_800_RVOe.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3762',
+        'title': "Nina's Story",
+        'dateEnd': 1607018400000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/LsaWs2MR_800_kkrR.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/rOg4wu9I_800_WthY.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3761',
+        'title': 'The Gem of Luxembourg',
+        'dateEnd': 1606996800000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/jdsq3V9L_800_ORMD.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/uL2lylJ8_800_IFDX.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3760',
+        'title': 'Perfect Day Starter',
+        'dateEnd': 1606975200000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/wKRN5VBe_800_2nBB.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/thELsqvK_800_2A8m.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3771',
+        'title': 'Jürgen Snow Ski Resort',
+        'dateEnd': 1606953600000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/CRTZMvWB_800_dM8H.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/IH0PSYYE_800_ReAr.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3758',
+        'title': 'Abstracto',
+        'dateEnd': 1606942800000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/0d1DQIh__800_kSmd.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/onvn5Tbc_800_bFI2.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3759',
+        'title': 'Believe In Magic',
+        'dateEnd': 1606932000000,
+        'thumb': 'https://thumb.cdn.redecor.com/d/B_kAIJ_640_JZ.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/yyAEekxg_800_L8-f.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3757',
+        'title': 'Warm Family Evenings',
+        'dateEnd': 1606910400000,
+        'thumb': 'https://thumb.cdn.redecor.com/d/MzovSU_640_7C.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/iP3zxNFk_800_W2sN.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3756',
+        'title': 'Flowers or Mountains?',
+        'dateEnd': 1606888800000,
+        'thumb': 'https://thumb.cdn.redecor.com/d/9e8E-C_640_Fv.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/WtPKCehk_800_cOTo.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3764',
+        'title': 'From Storage to Balcony',
+        'dateEnd': 1606867200000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/tzUYueEP_800_QLhp.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/yxGyuwHu_800_9qpE.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3750',
+        'title': 'Future is Here',
+        'dateEnd': 1606856400000,
+        'thumb': 'https://thumb.cdn.redecor.com/d/6V2QIO_800_W2.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/x7aw2_Oa_800_lQn9.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3753',
+        'title': 'Surprise for a Grandson',
+        'dateEnd': 1606845600000,
+        'thumb': 'https://thumb.cdn.redecor.com/d/KT2Qie_800_NB.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/lbFDmsYP_800_oh-Y.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3745',
+        'title': 'Interior With Respect',
+        'dateEnd': 1606824000000,
+        'thumb': 'https://thumb.cdn.redecor.com/d/8sFt7T_800_GL.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/EgC0-BZy_800_pW7q.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3749',
+        'title': 'Girls Only Household',
+        'dateEnd': 1606802400000,
+        'thumb': 'https://thumb.cdn.redecor.com/d/9IUmdT_800_IQ.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2012/zzlCtvD__800_L_gN.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3755',
+        'title': 'Carte Blanche',
+        'dateEnd': 1606780800000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/cxK9dIE9_800_9g2U.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2011/c-OZbTcM_800_I_A9.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3751',
+        'title': 'Love for Quirkiness',
+        'dateEnd': 1606770000000,
+        'thumb': 'https://thumb3.cdn.redecor.com/2011/DbHzjFf4_800_SZAc.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2011/QnaeiWxG_800_Aaan.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      },
+      {
+        'id': '3748',
+        'title': "You're Welcome to Stay!",
+        'dateEnd': 1606759200000,
+        'thumb': 'https://thumb.cdn.redecor.com/d/Z-E0Pw_800_Eq.jpg',
+        'designs': [
+          {
+            'thumb': 'https://d.redecor.com/2011/SkWrkGPg_800_3PA7.jpg',
+            '__typename': 'Design'
+          }
+        ],
+        '__typename': 'Challenge'
+      }
+    ]
+  }
 }
